@@ -47,6 +47,22 @@
           <span>Sales Rows</span>
           <strong id="salesCount">-</strong>
         </div>
+        <div class="metric">
+          <span>DOB Jobs</span>
+          <strong id="dobJobsCount">-</strong>
+        </div>
+        <div class="metric">
+          <span>CO Records</span>
+          <strong id="coCount">-</strong>
+        </div>
+        <div class="metric">
+          <span>Violations</span>
+          <strong id="violationsCount">-</strong>
+        </div>
+        <div class="metric">
+          <span>PLUTO Rows</span>
+          <strong id="plutoCount">-</strong>
+        </div>
       </section>
 
       <section class="content-grid">
@@ -69,6 +85,26 @@
         </section>
       </section>
 
+      <section class="content-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Assessment Method</h2>
+          </div>
+          <ul id="methodology" class="step-list">
+            <li>Methodology notes will appear after a search.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Public Records</h2>
+          </div>
+          <ul id="externalLinks" class="source-list">
+            <li>Record links will appear after a search.</li>
+          </ul>
+        </section>
+      </section>
+
       <section class="records">
         <details open>
           <summary>Latest Assessment Record</summary>
@@ -77,6 +113,10 @@
         <details>
           <summary>Sales Records</summary>
           <pre id="salesRecords">[]</pre>
+        </details>
+        <details>
+          <summary>DOB / Zoning / CO Supplemental Records</summary>
+          <pre id="supplementalRecords">{}</pre>
         </details>
         <details>
           <summary>Sources</summary>
