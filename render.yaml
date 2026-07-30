@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: nyc-assessor-agent
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: NYC_ASSESSOR_PASSWORD
+        sync: false
