@@ -3,127 +3,184 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>NYC Assessor Agent</title>
+    <title>NYC DOB NOW / BIS Assessor Lookup v26</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
-    <main class="app">
-      <header class="topbar">
-        <div>
-          <p class="eyebrow">NYC property research</p>
-          <h1>Assessor Agent</h1>
-        </div>
-        <div class="status" id="status">Ready</div>
-      </header>
+    <header class="hero">
+      <h1>NYC DOB NOW / BIS Assessor Lookup <span>v26</span></h1>
+      <p>BBL/BIN/job lookup with PAA grouping, approval cost vs permit cost tracking, CO-issued lookup, and assessor valuation links.</p>
+    </header>
 
-      <section class="search-panel" aria-label="Property search">
-        <div class="mode-tabs" role="tablist" aria-label="Search mode">
-          <button class="tab active" type="button" data-mode="address">Address</button>
-          <button class="tab" type="button" data-mode="bbl">BBL</button>
+    <main class="wrap">
+      <section class="card">
+        <div class="sectionTitle">
+          <div>
+            <h2>Lookup</h2>
+            <p class="muted">Enter a 10-digit BBL, BIN, DOB NOW job number, or address keyword. For BBL use borough digit + block + lot, e.g. <code>4013520125</code>.</p>
+          </div>
+          <span class="pill">DOB NOW Open Data</span>
         </div>
-        <form id="searchForm" class="search-form">
-          <label id="queryLabel" for="query">Address</label>
-          <div class="search-row">
-            <input id="query" name="query" autocomplete="street-address" value="120 Broadway, Manhattan">
-            <button type="submit">Search</button>
+
+        <form id="lookupForm" class="grid g4">
+          <div>
+            <label for="q">Search value</label>
+            <input id="q" placeholder="BBL, BIN, Job #, or address" value="120 Broadway, Manhattan">
+          </div>
+          <div>
+            <label for="type">Search type</label>
+            <select id="type">
+              <option value="auto">Auto detect</option>
+              <option value="bbl">BBL</option>
+              <option value="bin">BIN</option>
+              <option value="job">DOB NOW Job #</option>
+              <option value="address">Address keyword</option>
+            </select>
+          </div>
+          <div>
+            <label for="limit">Max records</label>
+            <select id="limit">
+              <option>100</option>
+              <option selected>500</option>
+              <option>1000</option>
+              <option>2000</option>
+            </select>
+          </div>
+          <div>
+            <label>&nbsp;</label>
+            <button type="submit">Search DOB NOW</button>
           </div>
         </form>
-      </section>
 
-      <section class="summary-grid" aria-live="polite">
-        <div class="metric">
-          <span>BBL</span>
-          <strong id="bblValue">-</strong>
-        </div>
-        <div class="metric">
-          <span>Borough</span>
-          <strong id="boroughValue">-</strong>
-        </div>
-        <div class="metric">
-          <span>Assessment Rows</span>
-          <strong id="assessmentCount">-</strong>
-        </div>
-        <div class="metric">
-          <span>Sales Rows</span>
-          <strong id="salesCount">-</strong>
-        </div>
-        <div class="metric">
-          <span>DOB Jobs</span>
-          <strong id="dobJobsCount">-</strong>
-        </div>
-        <div class="metric">
-          <span>CO Records</span>
-          <strong id="coCount">-</strong>
-        </div>
-        <div class="metric">
-          <span>Violations</span>
-          <strong id="violationsCount">-</strong>
-        </div>
-        <div class="metric">
-          <span>PLUTO Rows</span>
-          <strong id="plutoCount">-</strong>
+        <div class="row controls">
+          <button id="openOnePage" class="green" type="button">Open ALL links in one page</button>
+          <button id="openTabs" class="ghost" type="button">Open all as separate tabs</button>
+          <button id="exportCsv" class="ghost" type="button">Export CSV</button>
+          <button id="clearBtn" class="ghost" type="button">Clear</button>
+          <span id="status" class="muted"></span>
         </div>
       </section>
 
-      <section class="content-grid">
-        <section class="panel">
-          <div class="panel-header">
-            <h2>Signals</h2>
-          </div>
-          <ul id="signals" class="signal-list">
-            <li>Search for a property to load assessment context.</li>
-          </ul>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <h2>Next Steps</h2>
-          </div>
-          <ul id="nextSteps" class="step-list">
-            <li>Results will appear after a search.</li>
-          </ul>
-        </section>
+      <section class="card notice">
+        <b>Filing extension logic used by this tool</b><br>
+        DOB NOW filings under the same construction project use the same parent job number plus an extension showing filing type and sequence. This page groups all records by parent job number. It treats <code>-I#</code> as initial, <code>-S#</code> as subsequent, and <code>-P#</code>/<code>-A#</code> as amendment/PAA-style records for cost tracking. Older/observed records may show amendment sequence as <code>-A1</code>; this page keeps it with the same parent job instead of counting it as a separate project.
+        <br><br>
+        <b>DOB term fix:</b> Job Type means <code>NB</code>, <code>Alteration</code>, <code>ALT-CO</code>, <code>No Work</code>, etc. Work Type means the actual trade/scope such as <code>GC</code> General Construction, <code>MS</code> Mechanical Systems, <code>FN</code>/<code>FO</code> Foundation, <code>EW</code>/<code>EA</code> Earthwork, <code>ST</code> Structural, <code>PL</code> Plumbing, etc.
       </section>
 
-      <section class="content-grid">
-        <section class="panel">
-          <div class="panel-header">
-            <h2>Assessment Method</h2>
+      <section id="linkCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>Assessor deep links / quick links</h2>
+            <p id="linkSub" class="muted"></p>
           </div>
-          <ul id="methodology" class="step-list">
-            <li>Methodology notes will appear after a search.</li>
-          </ul>
-        </section>
-
-        <section class="panel">
-          <div class="panel-header">
-            <h2>Public Records</h2>
+          <div class="toolbar">
+            <button id="openOnePage2" class="green" type="button">Open ALL links in one page</button>
+            <button id="openTabs2" class="ghost" type="button">Separate tabs</button>
           </div>
-          <ul id="externalLinks" class="source-list">
-            <li>Record links will appear after a search.</li>
-          </ul>
-        </section>
+        </div>
+        <div id="links" class="linkGrid"></div>
+        <p class="muted small">Most buttons use direct links when the needed BBL/BIN is available. BIS uses direct BIN or borough/block/lot property-profile links. ACRIS uses the BBL direct format: borough + block + lot.</p>
       </section>
 
-      <section class="records">
-        <details open>
-          <summary>Latest Assessment Record</summary>
-          <pre id="assessmentRecord">{}</pre>
-        </details>
-        <details>
-          <summary>Sales Records</summary>
-          <pre id="salesRecords">[]</pre>
-        </details>
-        <details>
-          <summary>DOB / Zoning / CO Supplemental Records</summary>
-          <pre id="supplementalRecords">{}</pre>
-        </details>
-        <details>
-          <summary>Sources</summary>
-          <ul id="sources" class="source-list"></ul>
-        </details>
+      <section id="kpis" class="grid g4 hidden"></section>
+
+      <section class="card">
+        <div class="sectionTitle">
+          <div>
+            <h2>Best cost tracking illustration</h2>
+            <p class="muted">Use this flow to avoid double-counting PAAs. Parent job = valuation project. Filing extensions = revisions/additional scope. Separate approval-estimated cost from permit/fee cost.</p>
+          </div>
+        </div>
+        <div class="flow">
+          <div class="step"><b>1. Parcel</b><span class="muted">Start with BBL and all associated BINs. Confirm condo/apportionment issues before valuation.</span></div>
+          <div class="step"><b>2. Parent Job</b><span class="muted">Strip suffix: <code>Q00657466-A1</code> -> <code>Q00657466</code>. Group all extensions together.</span></div>
+          <div class="step"><b>3. Filing Type</b><span class="muted">Initial/subsequent/PAA. PAA changes approved plans; subsequent adds separate scope/work type.</span></div>
+          <div class="step"><b>4. Approval Cost</b><span class="muted">Track declared/estimated construction cost from approved filings and revisions.</span></div>
+          <div class="step"><b>5. Permit Cost</b><span class="muted">Track permit/filing fees separately. Do not confuse DOB fees with physical improvement value.</span></div>
+        </div>
+        <div class="warning">
+          <b>Assessor rule of thumb:</b> for progress assessment, use job scope, inspection/readiness, CO/TCO/LOC, and physical condition. Permit fees are an administrative cost signal, not the improvement value.
+        </div>
+      </section>
+
+      <section id="parcelCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>BBL / BIN summary</h2>
+            <p class="muted">Unique BBLs and BINs found in the DOB NOW records.</p>
+          </div>
+        </div>
+        <div id="parcelSummary"></div>
+      </section>
+
+      <section id="coCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>DOB NOW Certificate of Occupancy issued records</h2>
+            <p class="muted">Pulled from NYC Open Data dataset <code>pkdm-hqz6</code>. Shows first and latest issued dates first. Expand details for full CO rows.</p>
+          </div>
+        </div>
+        <div id="coIssued"></div>
+      </section>
+
+      <section id="legacyBisCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>BIS / Legacy DOB filings from Open Data</h2>
+            <p class="muted">This checks the legacy DOB Job Application Filings dataset, separate from DOB NOW Build.</p>
+          </div>
+          <span class="pill amber">BIS legacy</span>
+        </div>
+        <div id="legacyBis"></div>
+      </section>
+
+      <section id="groupCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>Grouped parent jobs</h2>
+            <p class="muted">Visual hierarchy: parent job number first, then filings sorted I1 -> S1/S2 -> P1/A1. Work Type rows use abbreviations only; full names are listed below.</p>
+          </div>
+          <div class="toolbar">
+            <button class="ghost sortBtn" type="button" data-sort="job">Group: Job #</button>
+            <button class="ghost sortBtn" type="button" data-sort="dateDesc">Group: Newest first</button>
+            <button class="ghost sortBtn" type="button" data-sort="costDesc">Group: Highest cost</button>
+          </div>
+        </div>
+        <div id="jobGroups"></div>
+      </section>
+
+      <section id="chartCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>Assessment chart</h2>
+            <p class="muted">Approval/estimated construction cost by parent job. Use it to prioritize high-cost active jobs for progress assessment review.</p>
+          </div>
+        </div>
+        <div id="costChart"></div>
+      </section>
+
+      <section id="assessmentCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>Assessment review suggestions</h2>
+            <p class="muted">Use DOB NOW as a trigger list, then confirm with field condition, CO/TCO/LOC, Finance, ACRIS, HPD, ZoLa, and BIS context.</p>
+          </div>
+        </div>
+        <div id="assessmentSuggestions" class="grid g3"></div>
+      </section>
+
+      <section id="rawCard" class="card hidden">
+        <div class="sectionTitle">
+          <div>
+            <h2>Raw DOB NOW records</h2>
+            <p class="muted">Collapsed by default. Expand only when you need to inspect all returned DOB NOW fields.</p>
+          </div>
+        </div>
+        <div id="raw"></div>
       </section>
     </main>
+
     <script src="/app.js"></script>
   </body>
 </html>
