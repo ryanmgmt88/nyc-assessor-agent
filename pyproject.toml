@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nyc-assessor-agent"
+version = "0.1.0"
+description = "A small research agent for NYC property assessment lookups."
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+nyc-assessor = "nyc_assessor_agent.cli:main"
+nyc-assessor-web = "nyc_assessor_agent.web:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+nyc_assessor_agent = ["web_assets/*.html", "web_assets/*.css", "web_assets/*.js"]
