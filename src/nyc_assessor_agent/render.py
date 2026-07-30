@@ -20,6 +20,15 @@ def render_text(brief: AssessorBrief) -> str:
     lines.extend(f"- {step}" for step in brief.next_steps)
 
     lines.append("")
+    lines.append("Assessment methodology")
+    lines.extend(f"- {note}" for note in brief.methodology_notes)
+
+    lines.append("")
+    lines.append("Public-record links")
+    for label, url in brief.external_links.items():
+        lines.append(f"- {label}: {url}")
+
+    lines.append("")
     lines.append("Sources")
     for label, url in brief.sources.items():
         lines.append(f"- {label}: {url}")
