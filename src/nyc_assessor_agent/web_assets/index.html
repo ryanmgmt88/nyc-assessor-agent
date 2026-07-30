@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NYC Assessor Agent</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">NYC property research</p>
+          <h1>Assessor Agent</h1>
+        </div>
+        <div class="status" id="status">Ready</div>
+      </header>
+
+      <section class="search-panel" aria-label="Property search">
+        <div class="mode-tabs" role="tablist" aria-label="Search mode">
+          <button class="tab active" type="button" data-mode="address">Address</button>
+          <button class="tab" type="button" data-mode="bbl">BBL</button>
+        </div>
+        <form id="searchForm" class="search-form">
+          <label id="queryLabel" for="query">Address</label>
+          <div class="search-row">
+            <input id="query" name="query" autocomplete="street-address" value="120 Broadway, Manhattan">
+            <button type="submit">Search</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="summary-grid" aria-live="polite">
+        <div class="metric">
+          <span>BBL</span>
+          <strong id="bblValue">-</strong>
+        </div>
+        <div class="metric">
+          <span>Borough</span>
+          <strong id="boroughValue">-</strong>
+        </div>
+        <div class="metric">
+          <span>Assessment Rows</span>
+          <strong id="assessmentCount">-</strong>
+        </div>
+        <div class="metric">
+          <span>Sales Rows</span>
+          <strong id="salesCount">-</strong>
+        </div>
+      </section>
+
+      <section class="content-grid">
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Signals</h2>
+          </div>
+          <ul id="signals" class="signal-list">
+            <li>Search for a property to load assessment context.</li>
+          </ul>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <h2>Next Steps</h2>
+          </div>
+          <ul id="nextSteps" class="step-list">
+            <li>Results will appear after a search.</li>
+          </ul>
+        </section>
+      </section>
+
+      <section class="records">
+        <details open>
+          <summary>Latest Assessment Record</summary>
+          <pre id="assessmentRecord">{}</pre>
+        </details>
+        <details>
+          <summary>Sales Records</summary>
+          <pre id="salesRecords">[]</pre>
+        </details>
+        <details>
+          <summary>Sources</summary>
+          <ul id="sources" class="source-list"></ul>
+        </details>
+      </section>
+    </main>
+    <script src="/app.js"></script>
+  </body>
+</html>
