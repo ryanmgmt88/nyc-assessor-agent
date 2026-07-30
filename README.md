@@ -72,6 +72,15 @@ docker run --rm -p 8765:8765 -e NYC_ASSESSOR_PASSWORD="choose-a-strong-password"
 
 The username is `admin`.
 
+The web UI follows the `NYC DOB NOW / BIS Assessor Lookup v26` workflow:
+
+- Auto-detects BBL, BIN, DOB NOW job number, or address keyword.
+- Groups DOB NOW filings by parent job number.
+- Tracks initial/subsequent/PAA-style suffixes such as `-I1`, `-S1`, `-P1`, and `-A1`.
+- Separates approval/declared construction cost from permit-estimated cost signals.
+- Pulls DOB NOW CO and legacy BIS job records where available.
+- Provides assessor deep links for DOB BIS, DOB NOW, ACRIS, ZoLa, Finance, and the Property Information Portal.
+
 With Docker Compose:
 
 ```powershell
