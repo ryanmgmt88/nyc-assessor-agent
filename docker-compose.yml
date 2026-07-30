@@ -1,0 +1,10 @@
+services:
+  nyc-assessor:
+    build: .
+    ports:
+      - "8765:8765"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8765
+      # Set this before exposing the app beyond your private machine.
+      # NYC_ASSESSOR_PASSWORD: change-me
