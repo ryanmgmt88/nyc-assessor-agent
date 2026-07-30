@@ -51,6 +51,9 @@ class AssessorBrief:
     resolved_address: str | None
     assessment_records: list[dict[str, Any]]
     sales_records: list[dict[str, Any]]
+    supplemental_records: dict[str, list[dict[str, Any]]]
     signals: list[str]
     next_steps: list[str]
+    methodology_notes: list[str]
+    external_links: dict[str, str]
     sources: dict[str, str]
